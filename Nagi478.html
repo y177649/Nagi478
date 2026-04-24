@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>凪 - 478</title>
+<!-- タブ icon: 先に data URL（相対パス解決の失敗・file:// でも表示）。続けてファイル（更新時 v を上げる） -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22round%22%3E%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3Cg%20clip-path%3D%22url(%23round)%22%3E%20%3Crect%20width%3D%2232%22%20height%3D%2232%22%20x%3D%220%22%20y%3D%220%22%20fill%3D%22%23151829%22%2F%3E%20%3C%2Fg%3E%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2214.35%22%20fill%3D%22none%22%20stroke%3D%22rgba(230%2C%20195%2C%20150%2C%200.58)%22%20stroke-width%3D%221.1%22%2F%3E%20%3C%2Fsvg%3E">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg?v=7">
+<link rel="apple-touch-icon" href="./favicon.svg?v=7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Nagi478.css">
+</head>
+<body>
+  <!-- Block: main UI（タイトル・呼吸・フェーズ・案内・時間・開始） -->
+  <main class="app">
+    <!-- タイトル帯 -->
+    <header class="header">
+      <h1 class="title">凪</h1>
+      <div class="title-en-scroll">
+        <div class="title-en-viewport">
+          <div class="title-en-track">
+            <p class="title-en-line">It describes the ocean's surface</p>
+            <p class="title-en-line">when the wind dies down,</p>
+            <p class="title-en-line">leaving it perfectly still without a single ripple.</p>
+            <p class="title-en-line" aria-hidden="true">It describes the ocean's surface</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 呼吸アニメーション（円の拡縮） -->
+    <div class="breath-visual" id="breathVisual">
+      <div class="breath-circle" id="breathCircle"></div>
+      <div class="breath-core"></div>
+    </div>
+
+    <!-- 現在フェーズ（日/英） -->
+    <div class="phase-area">
+      <div class="phase-label" id="phaseLabel">—</div>
+      <div class="phase-en" id="phaseEn">ready</div>
+    </div>
+
+    <!-- 吸 / 止 / 吐 インジケータ -->
+    <div class="position-guide" id="positionGuide">
+      <div class="position-item" data-phase="inhale">
+        <div class="position-step" aria-hidden="true">4</div>
+        <div class="position-dot"></div>
+        <div class="position-label">吸</div>
+      </div>
+      <div class="position-item" data-phase="hold">
+        <div class="position-step" aria-hidden="true">7</div>
+        <div class="position-dot"></div>
+        <div class="position-label">止</div>
+      </div>
+      <div class="position-item" data-phase="exhale">
+        <div class="position-step" aria-hidden="true">8</div>
+        <div class="position-dot"></div>
+        <div class="position-label">吐</div>
+      </div>
+    </div>
+
+    <!-- duration 選択後に表示：残り時間（数字のみ）→（分選択）→ Start -->
+    <div class="controls" id="controls">
+      <div class="info-row" id="infoRow">
+        <div class="time-remaining" id="timeRemaining" aria-live="polite">—</div>
+      </div>
+      <div class="minutes-selector" id="minutesSelector">
+        <label for="minutesInput">duration</label>
+        <div class="minutes-group">
+          <select id="minutesInput" class="minutes-select" aria-label="Duration minutes">
+            <option value="" selected disabled>—</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+          </select>
+          <span class="minutes-unit">min</span>
+        </div>
+      </div>
+      <button type="button" class="start-btn" id="startBtn">Start</button>
+      <div class="session-actions" id="sessionActions" aria-hidden="true">
+        <button type="button" class="session-btn pause-btn" id="pauseBtn">Pause</button>
+        <button type="button" class="session-btn stop-btn" id="stopBtn">Stop</button>
+      </div>
+      <div class="selected-duration" id="selectedDuration">—</div>
+    </div>
+  </main>
+
+  <!-- Block: 暗転レイヤ（z-index 上。JS で .active / .dismissing） -->
+  <div class="dim-overlay" id="dimOverlay"></div>
+
+  <!-- Block: 「目を閉じて」メッセージ（静寂演出） -->
+  <div class="eyes-message" id="eyesMessage">
+    <div class="eyes-message-main">目を閉じて</div>
+    <div class="eyes-message-sub">close your eyes</div>
+  </div>
+
+  <script src="Nagi478.js"></script>
+</body>
+</html>
