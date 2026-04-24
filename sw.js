@@ -2,8 +2,8 @@ const CACHE_NAME = "nagi478-v1";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./Nagi478.css",
-  "./Nagi478.js",
+  "./nagi478.css",
+  "./nagi478.js",
   "./manifest.webmanifest",
   "./favicon.svg?v=7"
 ];
