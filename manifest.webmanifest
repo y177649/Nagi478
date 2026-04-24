@@ -1,0 +1,20 @@
+{
+  "name": "凪 - 478",
+  "short_name": "凪478",
+  "description": "4-7-8 呼吸法のための静かなタイマーアプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#151829",
+  "theme_color": "#151829",
+  "icons": [
+    {
+      "src": "./favicon.svg?v=7",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -103,8 +103,8 @@
   /* 英語副題：各スロット高さ=窓と同一にし、次行が一瞬でも見えないようにする */
   .title-en-scroll {
     --title-en-vh: 1.7rem;
-    /* 1 周 40s。スライド 1.5s×3、静止 8.875s×4 */
-    --title-en-cycle: 40s;
+    /* 1 周 21.2s = 3.8s 表示×4 行 + 2s 行間スライド×3 */
+    --title-en-cycle: 21.2s;
     max-width: 20rem;
     margin: 0 auto;
     width: 100%;
@@ -116,19 +116,44 @@
     contain: content;
   }
   .title-en-track {
-    will-change: transform;
-    animation: titleEnVScroll var(--title-en-cycle, 40s) linear infinite;
+    will-change: transform, opacity;
+    animation: titleEnVScroll var(--title-en-cycle, 21.2s) linear infinite;
+    opacity: 1;
   }
-  /* 各段 1.7rem。移動 1.5s×3、静止 8.875s×4。linear で区間内は等速 */
+  /* 各段 1.7rem。行間スライドの中間で opacity を下げて色を薄く */
   @keyframes titleEnVScroll {
-    0% { transform: translateY(0); }
-    22.1875% { transform: translateY(0); }
-    25.9375% { transform: translateY(calc(-1 * var(--title-en-vh, 1.7rem))); }
-    48.125% { transform: translateY(calc(-1 * var(--title-en-vh, 1.7rem))); }
-    51.875% { transform: translateY(calc(-2 * var(--title-en-vh, 1.7rem))); }
-    74.0625% { transform: translateY(calc(-2 * var(--title-en-vh, 1.7rem))); }
-    77.8125% { transform: translateY(calc(-3 * var(--title-en-vh, 1.7rem))); }
-    100% { transform: translateY(calc(-3 * var(--title-en-vh, 1.7rem))); }
+    0%,
+    17.925% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    22.642% {
+      transform: translateY(calc(-0.5 * var(--title-en-vh, 1.7rem)));
+      opacity: 0.32;
+    }
+    27.359%,
+    45.283% {
+      transform: translateY(calc(-1 * var(--title-en-vh, 1.7rem)));
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(calc(-1.5 * var(--title-en-vh, 1.7rem)));
+      opacity: 0.32;
+    }
+    54.717%,
+    72.642% {
+      transform: translateY(calc(-2 * var(--title-en-vh, 1.7rem)));
+      opacity: 1;
+    }
+    77.359% {
+      transform: translateY(calc(-2.5 * var(--title-en-vh, 1.7rem)));
+      opacity: 0.32;
+    }
+    82.075%,
+    100% {
+      transform: translateY(calc(-3 * var(--title-en-vh, 1.7rem)));
+      opacity: 1;
+    }
   }
   .title-en-line {
     font-family: var(--font-en);
@@ -164,6 +189,7 @@
     }
     .title-en-track {
       animation: none;
+      opacity: 1;
     }
     .title-en-line[aria-hidden='true'] {
       display: none;
