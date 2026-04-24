@@ -10,9 +10,19 @@
 [![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=flat-square)](#)
 [![Markdown](https://img.shields.io/badge/Markdown-000000?style=flat-square&logo=markdown&logoColor=white)](#)
 
-![Nagi478 screenshot](./screenshot.png)
+<div align="center">
+  <img src="./screenshot.png" alt="アプリケーションのスクリーンショット" width="700">
+</div>
 
-呼吸を整えたいときに、すぐ使える 4-7-8 呼吸ガイドです。
+<div align="center">
+
+**呼吸を整えたいときに、すぐ使える。**
+<br>
+Nagi 478 は、4-7-8 呼吸法をガイドするシンプルな呼吸サポートツールです。
+<br>
+落ち着きたいときに、短時間で呼吸のリズムを整えられます。
+
+</div>
 
 ### いますぐ使う
 - 公開URL: [https://nagi478.22311092ys.workers.dev/](https://nagi478.22311092ys.workers.dev/)
