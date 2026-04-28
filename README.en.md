@@ -15,20 +15,32 @@
 
 ![Nagi478 screenshot](./screenshot.png)
 
-A minimal 4-7-8 breathing guide you can use right away when you want to calm your breathing.
+A minimal 4-7-8 breathing guide with binaural beats to calm your mind and ease you into sleep.
 
 ### Quick Access
 - Live URL: [https://nagi478.22311092ys.workers.dev/](https://nagi478.22311092ys.workers.dev/)
 
 ### How To Use
-1. Open the [live page](https://nagi478.22311092ys.workers.dev/)  
-2. Select minutes in `duration`  
-3. Press `Start`  
-4. Use `Pause` / `Stop` whenever needed
+1. Open the [live page](https://nagi478.22311092ys.workers.dev/)
+2. Follow the tutorial — or press `skip` to jump straight in
+3. Select a duration (`10 min` recommended)
+4. Press `Start`
+5. **Inhale** when sound comes from the left, **hold** at center, **exhale** to the right
+6. Use `Pause` / `Stop` whenever needed
+
+### 4-7-8 Breathing
+- **4 seconds** — inhale through the nose
+- **7 seconds** — hold
+- **8 seconds** — exhale slowly through the mouth
+
+After one minute the audio fades and the screen dims. Close your eyes and focus on your breath.
+
+### Binaural Beats
+Earphones recommended. Audio cues are panned left / center / right so you always know which phase you're in — even with your eyes closed.
 
 ### Tips
-- Use it in a quiet place with lower screen brightness
-- Earphones make audio cues easier to hear
+- Use in a quiet place with lower screen brightness
+- Earphones make the spatial audio cues much clearer
 - Turn off notifications before starting for better focus
 
 ### Notes
