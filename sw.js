@@ -1,4 +1,4 @@
-const CACHE_NAME = "nagi478-v5";
+const CACHE_NAME = "nagi478-v6";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -6,7 +6,7 @@ const CORE_ASSETS = [
   "./nagi478.js",
   "./manifest.webmanifest",
   "./favicon.svg?v=7",
-  "./apple-touch-icon.png"
+  "./pwa-icon.png"
 ];
 
 self.addEventListener("install", (event) => {
