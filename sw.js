@@ -1,11 +1,12 @@
-const CACHE_NAME = "nagi478-v2";
+const CACHE_NAME = "nagi478-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./nagi478.css",
   "./nagi478.js",
   "./manifest.webmanifest",
-  "./favicon.svg?v=7"
+  "./favicon.svg?v=7",
+  "./icon.svg"
 ];
 
 self.addEventListener("install", (event) => {
