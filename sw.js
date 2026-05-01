@@ -1,4 +1,4 @@
-const CACHE_NAME = "nagi478-v1";
+const CACHE_NAME = "nagi478-v2";
 const CORE_ASSETS = [
   "./",
   "./index.html",

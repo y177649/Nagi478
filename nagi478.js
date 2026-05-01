@@ -728,6 +728,7 @@
       const textEl   = document.getElementById('tutorialText');
       const guide    = document.getElementById('tutorialGuide');
       const startBtn = document.getElementById('tutorialStart');
+      const nextBtn  = document.getElementById('tutorialNext');
       const skipBtn  = document.getElementById('tutorialSkip');
 
       const SLIDES = [
@@ -799,6 +800,13 @@
             startBtn.classList.remove('hidden');
             tt(() => startBtn.classList.add('visible'), 100);
           }
+          if (!slide.showStart) {
+            nextBtn.classList.remove('hidden');
+            tt(() => nextBtn.classList.add('visible'), 100);
+          } else {
+            nextBtn.classList.remove('visible');
+            tt(() => nextBtn.classList.add('hidden'), 500);
+          }
           if (slide.showGuide) {
             guide.hidden = false;
             tt(() => guide.classList.add('visible'), 400);
@@ -822,6 +830,13 @@
           textEl.classList.remove('visible');
           tt(() => { slideIdx = 1; showSlide(1); }, FADE);
         }, 1000);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (!running) return;
+        this._tutorialTimers.forEach(id => clearTimeout(id));
+        this._tutorialTimers = [];
+        nextSlide();
       });
 
       skipBtn.addEventListener('click', dismiss);

@@ -897,6 +897,23 @@
     border-color: rgba(242, 232, 212, 0.45);
   }
 
+  .tutorial-next {
+    font-family: var(--font-en);
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    opacity: 0;
+    transition: color 0.3s ease, opacity 0.5s ease;
+  }
+  .tutorial-next.hidden { display: none; }
+  .tutorial-next.visible { opacity: 1; }
+  .tutorial-next:hover { color: var(--text-primary); }
+
   .tutorial-skip {
     font-family: var(--font-en);
     font-size: 0.68rem;
