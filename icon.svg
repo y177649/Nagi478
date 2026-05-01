@@ -8,7 +8,7 @@
   </defs>
   <rect width="512" height="512" fill="url(#bg)"/>
   <text x="256" y="256"
-    font-family="'Hiragino Mincho ProN','YuMincho','Yu Mincho','Noto Serif JP','MS Mincho',serif"
+    font-family="'Hiragino Mincho ProN','YuMincho','Yu Mincho','Noto Serif CJK JP','Noto Serif JP','MS Mincho',serif"
     font-size="300"
     fill="#f2e8d4"
     text-anchor="middle"
