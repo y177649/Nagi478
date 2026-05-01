@@ -787,3 +787,126 @@
     color: var(--text-muted);
     text-transform: lowercase;
   }
+
+  /* ── Tutorial Overlay ────────────────────────────────────── */
+  .tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg-deep);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 2rem 2rem;
+    transition: opacity 1.5s ease;
+  }
+  .tutorial-overlay.dismissing {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .tutorial-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    max-width: min(480px, 90vw);
+    text-align: center;
+  }
+
+  .tutorial-text {
+    font-family: var(--font-jp);
+    font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+    color: var(--text-primary);
+    line-height: 2.2;
+    letter-spacing: 0.06em;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    margin: 0;
+  }
+  .tutorial-text.visible { opacity: 1; }
+
+  /* ミニポジションガイド */
+  .tutorial-guide {
+    display: flex;
+    gap: 3.5rem;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .tutorial-guide.visible { opacity: 1; }
+
+  .tutorial-guide-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .tutorial-guide-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-faint);
+    transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .tutorial-guide-label {
+    font-family: var(--font-jp);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    transition: color 0.4s ease;
+  }
+  .tutorial-guide-item.active .tutorial-guide-dot {
+    background: var(--accent);
+    transform: scale(1.7);
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .tutorial-guide-item.active .tutorial-guide-label {
+    color: var(--accent);
+  }
+
+  /* フッターボタン群 */
+  .tutorial-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .tutorial-start {
+    font-family: var(--font-jp);
+    font-size: 0.88rem;
+    letter-spacing: 0.3em;
+    color: var(--text-primary);
+    background: none;
+    border: 1px solid rgba(242, 232, 212, 0.28);
+    padding: 0.65rem 2.2rem;
+    border-radius: 2px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.9s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .tutorial-start.hidden { display: none; }
+  .tutorial-start.visible { opacity: 1; }
+  .tutorial-start:hover {
+    background: rgba(242, 232, 212, 0.06);
+    border-color: rgba(242, 232, 212, 0.45);
+  }
+
+  .tutorial-skip {
+    font-family: var(--font-en);
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    transition: color 0.3s ease;
+  }
+  .tutorial-skip:hover { color: var(--text-muted); }

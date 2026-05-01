@@ -66,6 +66,7 @@
       this._idleReDimArmed = false;
       this._idleReDimTimer = null;
       this._idleReDimBound = false;
+      this._tutorialTimers = [];
       this._onIdleReDimUserAction = (e) => {
         if (!this._idleReDimArmed || !this.isRunning) return;
         if (this.els.dimOverlay.classList.contains('active')) return;
@@ -84,6 +85,8 @@
       document.addEventListener('touchmove', (e) => {
         if (e.scale !== 1) e.preventDefault();
       }, { passive: false });
+
+      this.initTutorial();
     }
 
     // ————————————————————————————————————————————————
@@ -115,15 +118,7 @@
       const minutes = Math.max(1, Math.min(15, parseInt(this.els.minutesInput.value, 10) || 0));
       if (!minutes) return;
 
-      if (!this.audioCtx) {
-        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        this.masterGain = this.audioCtx.createGain();
-        this.masterGain.gain.value = 0.6;
-        this.masterGain.connect(this.audioCtx.destination);
-      }
-      if (this.audioCtx.state === 'suspended') {
-        await this.audioCtx.resume();
-      }
+      await this.initAudio();
 
       this.startBackgroundNoise();
       this.resetQuietMode();
@@ -711,6 +706,168 @@
       const id = setTimeout(fn, ms);
       this.timers.push(id);
       return id;
+    }
+
+    // ————————————————————————————————————————————————
+    // 7. オーディオ初期化 & チュートリアル
+    // ————————————————————————————————————————————————
+    async initAudio() {
+      if (!this.audioCtx) {
+        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        this.masterGain = this.audioCtx.createGain();
+        this.masterGain.gain.value = 0.6;
+        this.masterGain.connect(this.audioCtx.destination);
+      }
+      if (this.audioCtx.state === 'suspended') {
+        await this.audioCtx.resume();
+      }
+    }
+
+    initTutorial() {
+      const overlay  = document.getElementById('tutorialOverlay');
+      const textEl   = document.getElementById('tutorialText');
+      const guide    = document.getElementById('tutorialGuide');
+      const startBtn = document.getElementById('tutorialStart');
+      const skipBtn  = document.getElementById('tutorialSkip');
+
+      const SLIDES = [
+        {
+          text: '眠れないあなたへ\n\n明日の大事な仕事、大切な試合。\n緊張して眠れない夜に。',
+          hold: null,
+          showStart: true,
+        },
+        {
+          text: '４７８呼吸法と\nバイノーラルビートで\n\n心を凪のように静め、\n眠りへといざないます。',
+          hold: 6000,
+        },
+        {
+          text: '４秒で息を吸います。\n\n７秒間、息を止めたあと、\n\n８秒かけて息を吐きます。',
+          hold: 6000,
+        },
+        {
+          text: 'これを１〜１５分間、\n任意の時間続けます。\n１０分がおすすめです。\n\n１分経つと音がしずかになり\n画面が消灯します。\n目を閉じて呼吸に集中してください。',
+          hold: 9000,
+        },
+        {
+          text: '途中でリズムを見失ったら\n音の位置に注目してください。',
+          hold: null,
+          showGuide: true,
+          demo: true,
+        },
+      ];
+
+      const FADE = 1500;
+      let slideIdx = 0;
+      let running = true;
+
+      const tt = (fn, ms) => {
+        const id = setTimeout(fn, ms);
+        this._tutorialTimers.push(id);
+        return id;
+      };
+
+      const dismiss = () => {
+        if (!running) return;
+        running = false;
+        this._tutorialTimers.forEach(id => clearTimeout(id));
+        this._tutorialTimers = [];
+        guide.querySelectorAll('.tutorial-guide-item').forEach(el => el.classList.remove('active'));
+        overlay.classList.add('dismissing');
+        setTimeout(() => overlay.remove(), 1600);
+      };
+
+      const nextSlide = () => {
+        textEl.classList.remove('visible');
+        tt(() => {
+          slideIdx++;
+          if (slideIdx < SLIDES.length) showSlide(slideIdx);
+          else dismiss();
+        }, FADE);
+      };
+
+      const showSlide = (idx) => {
+        if (!running) return;
+        const slide = SLIDES[idx];
+
+        textEl.innerHTML = slide.text
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\n\n/g, '<br><br>')
+          .replace(/\n/g, ' ');
+        tt(() => {
+          textEl.classList.add('visible');
+          if (slide.showStart) {
+            startBtn.classList.remove('hidden');
+            tt(() => startBtn.classList.add('visible'), 100);
+          }
+          if (slide.showGuide) {
+            guide.hidden = false;
+            tt(() => guide.classList.add('visible'), 400);
+          }
+        }, 50);
+
+        if (slide.demo) {
+          tt(() => this.playTutorialDemo(guide, dismiss), FADE);
+          return;
+        }
+        if (slide.hold === null) return;
+
+        tt(nextSlide, FADE + slide.hold);
+      };
+
+      startBtn.addEventListener('click', () => {
+        void this.initAudio();
+        startBtn.classList.remove('visible');
+        tt(() => startBtn.classList.add('hidden'), 900);
+        tt(() => {
+          textEl.classList.remove('visible');
+          tt(() => { slideIdx = 1; showSlide(1); }, FADE);
+        }, 1000);
+      });
+
+      skipBtn.addEventListener('click', dismiss);
+
+      showSlide(0);
+    }
+
+    playTutorialDemo(guideEl, onComplete) {
+      const phases   = ['inhale', 'hold', 'exhale'];
+      const perPhase = 4;
+      const cycles   = 2;
+      const beatMs   = 1000;
+      const totalBeats = phases.length * perPhase * cycles;
+
+      const highlight = (phase) => {
+        guideEl.querySelectorAll('.tutorial-guide-item').forEach(el => {
+          el.classList.toggle('active', el.dataset.phase === phase);
+        });
+      };
+
+      // masterGain を 0 から 0.6 へ 8 拍かけてフェードイン
+      if (this.audioCtx && this.masterGain) {
+        const now = this.audioCtx.currentTime;
+        this.masterGain.gain.cancelScheduledValues(now);
+        this.masterGain.gain.setValueAtTime(0, now);
+        this.masterGain.gain.linearRampToValueAtTime(0.6, now + 8);
+      }
+
+      let t = 0;
+      for (let cycle = 0; cycle < cycles; cycle++) {
+        for (const phase of phases) {
+          for (let b = 0; b < perPhase; b++) {
+            const delay = t;
+            this._tutorialTimers.push(setTimeout(() => {
+              highlight(phase);
+              this.playBeat(phase, b, perPhase);
+            }, delay));
+            t += beatMs;
+          }
+        }
+      }
+
+      this._tutorialTimers.push(setTimeout(() => {
+        guideEl.querySelectorAll('.tutorial-guide-item').forEach(el => el.classList.remove('active'));
+        onComplete();
+      }, t + 1000));
     }
   }
 

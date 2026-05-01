@@ -114,6 +114,31 @@
     <div class="eyes-message-sub">close your eyes</div>
   </div>
 
+  <!-- Block: チュートリアル（初回案内、z-index 200） -->
+  <div id="tutorialOverlay" class="tutorial-overlay">
+    <div class="tutorial-main">
+      <p id="tutorialText" class="tutorial-text"></p>
+      <div id="tutorialGuide" class="tutorial-guide" hidden>
+        <div class="tutorial-guide-item" data-phase="inhale">
+          <div class="tutorial-guide-dot"></div>
+          <span class="tutorial-guide-label">吸う</span>
+        </div>
+        <div class="tutorial-guide-item" data-phase="hold">
+          <div class="tutorial-guide-dot"></div>
+          <span class="tutorial-guide-label">止める</span>
+        </div>
+        <div class="tutorial-guide-item" data-phase="exhale">
+          <div class="tutorial-guide-dot"></div>
+          <span class="tutorial-guide-label">吐く</span>
+        </div>
+      </div>
+    </div>
+    <div class="tutorial-footer">
+      <button id="tutorialStart" class="tutorial-start hidden">はじめる</button>
+      <button id="tutorialSkip" class="tutorial-skip">skip</button>
+    </div>
+  </div>
+
   <script src="nagi478.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
